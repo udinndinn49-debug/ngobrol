@@ -6,25 +6,20 @@
   <title>Obrolin ajaa — Ruang Diskusi Tanpa Batas</title>
   <style>
     /* --- Reset & Variables --- */
-  <div class="controls">
-    <button class="icon-btn" id="theme-toggle" title="Ganti Tema">
-        <span id="theme-icon">☀️</span>
-    </button>
-    </div>
     :root {
-      /* Light Mode */
+      /* Light Mode (DEFAULT) */
       --bg: #ffffff;
-      --card: #374151;
+      --card: #f9fafb; /* DIKOREKSI: Warna kartu di mode terang */
       --text: #0f1724;
       --muted: #6b7280;
-      --border: #454545;
-      --hover-bg: rgba(243, 244, 246, 0.05);
-      --reply-bg: #242124;
-      --reply-border: #1A1110;
+      --border: #e5e7eb; /* DIKOREKSI: Batas lebih terang */
+      --hover-bg: rgba(243, 244, 246, 0.9);
+      --reply-bg: #f3f4f6; /* Latar belakang balasan di mode terang */
+      --reply-border: #d1d5db; /* Batas balasan di mode terang */
       --accent: #2563eb;
       --success: #10b981;
       --radius: 12px;
-      --shadow: 0 6px 20px rgba(16, 24, 40, 0.08);
+      --shadow: 0 4px 12px rgba(16, 24, 40, 0.08); /* Bayangan lebih halus */
       
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
@@ -36,11 +31,11 @@
       --text: #f3f4f6;
       --muted: #9ca3af;
       --border: #4b5563;
-      --hover-bg: rgba(243, 244, 246, 0.05);
+      --hover-bg: rgba(243, 244, 246, 0.08); 
       --reply-bg: #4b5563;
       --reply-border: #6b7280;
-      --accent: #60a5fa; /* Sedikit lebih terang untuk kontras */
-      --shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      --accent: #60a5fa; 
+      --shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
     }
 
     * { box-sizing: border-box }
@@ -239,7 +234,7 @@
       const raw = localStorage.getItem('obrolin_data');
       if (raw) return JSON.parse(raw);
       const data = { users: [], threads: [], notifications: [] };
-      localStorage.setItem('obrolin_data', JSON.stringify(data));
+      // *Catatan: Data akan dibuat saat pertama kali post/daftar jika tidak ada*
       return data;
     }
     function saveData(d) { localStorage.setItem('obrolin_data', JSON.stringify(d)); }
@@ -366,12 +361,12 @@
     function renderThreads(filter = 'Semua') {
       const list = document.getElementById('threads-list'); list.innerHTML = '';
       const threads = data.threads.filter(t => filter === 'Semua' || t.category === filter);
-      if (threads.length === 0) list.innerHTML = '<div class="card">Belum ada thread. Jadilah yang pertama!</div>';
+      if (threads.length === 0) list.innerHTML = '<div class="card" style="text-align:center; padding: 20px;">Belum ada thread. Jadilah yang pertama!</div>';
       
       threads.forEach(t => {
         const authorInitial = t.authorName[0].toUpperCase();
         const item = el(`
-          <div class="card thread">
+          <div class="card thread" style="padding:15px">
             <div style="display:flex;gap:12px;align-items:center">
               <div class="vote">
                 <button class="up" data-id="${t.id}">▲</button>
@@ -431,7 +426,7 @@
           <div style="display:flex;gap:10px">
             <div class="avatar">${currentUser ? currentUser.name[0].toUpperCase() : 'G'}</div>
             <div style="flex:1">
-              <textarea id="reply-body" placeholder="${currentUser ? 'Tulis balasan...' : 'Silakan masuk untuk membalas...'}"></textarea>
+              <textarea id="reply-body" placeholder="${currentUser ? 'Tulis balasan...' : 'Silakan masuk untuk membalas...'}" ${currentUser ? '' : 'disabled'}></textarea>
               <div style="display:flex;justify-content:flex-end;margin-top:8px">
                 <button class="btn" id="post-reply" ${currentUser ? '' : 'disabled'}>Kirim Balasan</button>
               </div>
