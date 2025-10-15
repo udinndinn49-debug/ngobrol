@@ -4,8 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Obrolin ajaa — Ruang Diskusi Tanpa Batas</title>
+  
+  <script>
+    (function() {
+      // Baca tema dari local storage
+      const savedTheme = localStorage.getItem('obrolin_theme');
+      // Jika tema tersimpan adalah 'dark', langsung tambahkan class
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark-mode');
+      }
+    })();
+  </script>
+
   <style>
     /* --- Reset & Variables --- */
+    /* Menggunakan :root (default light mode) atau .dark-mode pada <html> */
     :root {
       /* Light Mode (DEFAULT) */
       --bg: #ffffff;
@@ -24,37 +37,37 @@
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
 
-    /* Dark Mode Variables */
-    .dark-mode {
-      --bg: #121212; /* DIKOREKSI: Background mode gelap yang lebih dalam untuk kontras yang lebih baik */
+    /* Dark Mode Variables - Menargetkan html.dark-mode */
+    html.dark-mode {
+      --bg: #121212; 
       --card: #1f2937;
       --text: #f3f4f6;
       --muted: #9ca3af;
-      --border: #374151; /* DIKOREKSI: Batas lebih gelap */
+      --border: #374151; 
       --hover-bg: rgba(243, 244, 246, 0.08); 
       --reply-bg: #374151;
       --reply-border: #4b5563;
       --accent: #60a5fa; 
-      --shadow: 0 6px 20px rgba(0, 0, 0, 0.7); /* DIKOREKSI: Bayangan lebih gelap */
+      --shadow: 0 6px 20px rgba(0, 0, 0, 0.7); 
     }
 
     * { box-sizing: border-box }
     html, body { 
       height: 100%; 
       margin: 0; 
-      background: var(--bg); 
+      background: var(--bg); /* Mengambil dari root/dark-mode */
       color: var(--text); 
       transition: background 0.3s, color 0.3s;
     }
     
-    /* DIKOREKSI: Mengatasi White Spot Scrollbar (Khusus WebKit/Chrome/Safari) */
-    .dark-mode ::-webkit-scrollbar {
+    /* Mengatasi White Spot Scrollbar (Khusus WebKit/Chrome/Safari) */
+    html.dark-mode ::-webkit-scrollbar {
       width: 8px;
     }
-    .dark-mode ::-webkit-scrollbar-track {
+    html.dark-mode ::-webkit-scrollbar-track {
       background: var(--bg);
     }
-    .dark-mode ::-webkit-scrollbar-thumb {
+    html.dark-mode ::-webkit-scrollbar-thumb {
       background-color: var(--reply-border);
       border-radius: 20px;
       border: 2px solid var(--bg);
@@ -88,7 +101,7 @@
       transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
     .btn.secondary:hover { background: rgba(37, 99, 235, 0.05); }
-    .dark-mode .btn.secondary:hover { background: rgba(255, 255, 255, 0.08); }
+    html.dark-mode .btn.secondary:hover { background: rgba(255, 255, 255, 0.08); } /* MENGGUNAKAN html.dark-mode */
 
     .icon-btn { 
       background: transparent; border: none; padding: 8px; 
@@ -114,7 +127,7 @@
     .cat.active { 
       background: rgba(37, 99, 235, 0.08); color: var(--accent); font-weight: 600;
     }
-    .dark-mode .cat.active { background: rgba(96, 165, 250, 0.2); }
+    html.dark-mode .cat.active { background: rgba(96, 165, 250, 0.2); } /* MENGGUNAKAN html.dark-mode */
 
     /* thread list */
     .thread { display: flex; gap: 12px; padding: 10px; border-radius: 10px; align-items: flex-start }
@@ -168,7 +181,7 @@
       display: flex; align-items: center; justify-content: center; 
       padding: 16px; z-index: 999;
     }
-    .dark-mode .modal-backdrop { background: rgba(0, 0, 0, 0.8); } /* DIKOREKSI: Sedikit lebih gelap */
+    html.dark-mode .modal-backdrop { background: rgba(0, 0, 0, 0.8); } /* MENGGUNAKAN html.dark-mode */
 
     /* Media Styling */
     .thread-media img, .thread-media video {
@@ -178,12 +191,11 @@
         margin-top: 10px;
         display: block;
         max-height: 400px;
-        /* DIKOREKSI: Memastikan media tidak menampilkan batas putih saat loading */
         background: var(--border); 
         border: 1px solid var(--border);
     }
-    /* DIKOREKSI: Jika video memiliki kontrol bawaan browser yang putih, ini bisa membantu (meski bergantung pada browser) */
-    .dark-mode .thread-media video {
+    /* Memastikan video kontrol gelap (hanya bekerja di beberapa browser) */
+    html.dark-mode .thread-media video { /* MENGGUNAKAN html.dark-mode */
         color: var(--text); 
         background-color: var(--bg);
     }
@@ -263,6 +275,9 @@
   </div>
 
   <script>
+    // Variabel global yang digunakan di seluruh skrip
+    const htmlEl = document.documentElement; // Akses elemen <html>
+    
     // ======= Simple local-storage forum implementation =======
     const DEFAULT_CATS = ['Teknologi', 'Lifestyle', 'Edukasi', 'Hiburan', 'Umum'];
 
@@ -284,26 +299,29 @@
     // ===== Theme Toggler Logic (UPDATED) =====
     const themeToggleBtn = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
-    let isDarkMode = localStorage.getItem('obrolin_theme') === 'dark';
+    let isDarkMode = htmlEl.classList.contains('dark-mode'); // Ambil status awal dari HTML
 
     function applyTheme() {
       if (isDarkMode) {
-        document.body.classList.add('dark-mode');
+        htmlEl.classList.add('dark-mode');
         themeIcon.textContent = '🌙';
         localStorage.setItem('obrolin_theme', 'dark');
       } else {
-        document.body.classList.remove('dark-mode');
+        htmlEl.classList.remove('dark-mode');
         themeIcon.textContent = '☀️';
         localStorage.setItem('obrolin_theme', 'light');
       }
     }
+    
+    // NEW: Atur ikon yang benar saat dimuat (setelah script di <head> menerapkan class)
+    themeIcon.textContent = isDarkMode ? '🌙' : '☀️';
 
     themeToggleBtn.onclick = () => {
       isDarkMode = !isDarkMode;
       applyTheme();
     };
 
-    applyTheme(); 
+    // Tidak perlu memanggil applyTheme() di sini lagi karena sudah dihandle oleh script di <head>
     
     // ===== Auth (very simple demo) =====
     function renderTopProfile() {
