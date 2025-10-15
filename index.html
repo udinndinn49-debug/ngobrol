@@ -26,16 +26,16 @@
 
     /* Dark Mode Variables */
     .dark-mode {
-      --bg: #1f2937;
-      --card: #374151;
+      --bg: #121212; /* DIKOREKSI: Background mode gelap yang lebih dalam untuk kontras yang lebih baik */
+      --card: #1f2937;
       --text: #f3f4f6;
       --muted: #9ca3af;
-      --border: #4b5563;
+      --border: #374151; /* DIKOREKSI: Batas lebih gelap */
       --hover-bg: rgba(243, 244, 246, 0.08); 
-      --reply-bg: #4b5563;
-      --reply-border: #6b7280;
+      --reply-bg: #374151;
+      --reply-border: #4b5563;
       --accent: #60a5fa; 
-      --shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+      --shadow: 0 6px 20px rgba(0, 0, 0, 0.7); /* DIKOREKSI: Bayangan lebih gelap */
     }
 
     * { box-sizing: border-box }
@@ -46,6 +46,20 @@
       color: var(--text); 
       transition: background 0.3s, color 0.3s;
     }
+    
+    /* DIKOREKSI: Mengatasi White Spot Scrollbar (Khusus WebKit/Chrome/Safari) */
+    .dark-mode ::-webkit-scrollbar {
+      width: 8px;
+    }
+    .dark-mode ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    .dark-mode ::-webkit-scrollbar-thumb {
+      background-color: var(--reply-border);
+      border-radius: 20px;
+      border: 2px solid var(--bg);
+    }
+
 
     /* --- Layout --- */
     .app { max-width: 980px; margin: 28px auto; padding: 18px }
@@ -154,7 +168,7 @@
       display: flex; align-items: center; justify-content: center; 
       padding: 16px; z-index: 999;
     }
-    .dark-mode .modal-backdrop { background: rgba(0, 0, 0, 0.7); }
+    .dark-mode .modal-backdrop { background: rgba(0, 0, 0, 0.8); } /* DIKOREKSI: Sedikit lebih gelap */
 
     /* Media Styling */
     .thread-media img, .thread-media video {
@@ -164,7 +178,16 @@
         margin-top: 10px;
         display: block;
         max-height: 400px;
+        /* DIKOREKSI: Memastikan media tidak menampilkan batas putih saat loading */
+        background: var(--border); 
+        border: 1px solid var(--border);
     }
+    /* DIKOREKSI: Jika video memiliki kontrol bawaan browser yang putih, ini bisa membantu (meski bergantung pada browser) */
+    .dark-mode .thread-media video {
+        color: var(--text); 
+        background-color: var(--bg);
+    }
+
 
     /* small screens */
     @media (max-width: 800px) {
@@ -258,7 +281,7 @@
     // ===== UI helpers =====
     function el(html) { const div = document.createElement('div'); div.innerHTML = html.trim(); return div.firstChild; }
     
-    // ===== Theme Toggler Logic =====
+    // ===== Theme Toggler Logic (UPDATED) =====
     const themeToggleBtn = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     let isDarkMode = localStorage.getItem('obrolin_theme') === 'dark';
@@ -359,7 +382,7 @@
       const title = document.getElementById('thread-title').value.trim();
       const body = document.getElementById('thread-body').value.trim();
       const category = document.getElementById('thread-category').value;
-      const mediaUrl = document.getElementById('thread-media-url').value.trim(); // NEW: Ambil URL media
+      const mediaUrl = document.getElementById('thread-media-url').value.trim(); 
       
       if (!title || !body) { alert('Judul dan isi thread wajib diisi.'); return; }
       
@@ -368,7 +391,7 @@
         title, 
         body, 
         category, 
-        mediaUrl: mediaUrl, // NEW: Simpan URL media
+        mediaUrl: mediaUrl, 
         authorId: currentUser.id, 
         authorName: currentUser.name, 
         created: new Date().toISOString(), 
@@ -381,13 +404,13 @@
       renderThreads(); 
       document.getElementById('thread-title').value = ''; 
       document.getElementById('thread-body').value = '';
-      document.getElementById('thread-media-url').value = ''; // NEW: Bersihkan field media
+      document.getElementById('thread-media-url').value = ''; 
     }
     
-    // NEW HELPER: Untuk membuat elemen media berdasarkan URL
+    // HELPER: Untuk membuat elemen media berdasarkan URL
     function createMediaElement(url) {
         if (!url) return '';
-        const ext = url.split('.').pop().toLowerCase().split('?')[0]; // Dapatkan ekstensi file
+        const ext = url.split('.').pop().toLowerCase().split('?')[0]; 
         let mediaHtml = '';
 
         if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
@@ -410,7 +433,7 @@
       if (threads.length === 0) list.innerHTML = '<div class="card" style="text-align:center; padding: 20px;">Belum ada thread. Jadilah yang pertama!</div>';
       
       threads.forEach(t => {
-        const mediaPreview = createMediaElement(t.mediaUrl); // NEW: Buat elemen media
+        const mediaPreview = createMediaElement(t.mediaUrl); 
         
         const item = el(`
           <div class="card thread" style="padding:15px">
@@ -455,7 +478,7 @@
 
     function openThread(id) {
       const t = data.threads.find(x => x.id === id); if (!t) return;
-      const mediaElementFull = createMediaElement(t.mediaUrl); // NEW: Buat elemen media untuk modal
+      const mediaElementFull = createMediaElement(t.mediaUrl); 
       
       let html = `<div class="card" style="max-width:820px; padding:20px;">
         <div style="display:flex;gap:12px;align-items:flex-start">
