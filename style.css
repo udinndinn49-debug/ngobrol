@@ -1,0 +1,190 @@
+/* --- Reset & Variables --- */
+/* Menggunakan :root (default light mode) atau .dark-mode pada <html> */
+:root {
+  /* Light Mode (DEFAULT) */
+  --bg: #ffffff;
+  --card: #f9fafb;  
+  --text: #0f1724;
+  --muted: #6b7280;
+  --border: #e5e7eb;  
+  --hover-bg: rgba(243, 244, 246, 0.9);
+  --reply-bg: #f3f4f6;  
+  --reply-border: #d1d5db;  
+  --accent: #2563eb;
+  --success: #10b981;
+  --radius: 12px;
+  --shadow: 0 4px 12px rgba(16, 24, 40, 0.08);  
+  
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Dark Mode Variables - Menargetkan html.dark-mode */
+html.dark-mode {
+  --bg: #121212;  
+  --card: #1f2937;
+  --text: #f3f4f6;
+  --muted: #9ca3af;
+  --border: #374151;  
+  --hover-bg: rgba(243, 244, 246, 0.08);  
+  --reply-bg: #374151;
+  --reply-border: #4b5563;
+  --accent: #60a5fa;  
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.7);  
+}
+
+* { box-sizing: border-box }
+html, body {  
+  height: 100%;  
+  margin: 0;  
+  background: var(--bg); /* Mengambil dari root/dark-mode */
+  color: var(--text);  
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Mengatasi White Spot Scrollbar (Khusus WebKit/Chrome/Safari) */
+html.dark-mode ::-webkit-scrollbar {
+  width: 8px;
+}
+html.dark-mode ::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+html.dark-mode ::-webkit-scrollbar-thumb {
+  background-color: var(--reply-border);
+  border-radius: 20px;
+  border: 2px solid var(--bg);
+}
+
+
+/* --- Layout --- */
+.app { max-width: 980px; margin: 28px auto; padding: 18px }
+header { display: flex; gap: 12px; align-items: center; justify-content: space-between }
+.brand { display: flex; gap: 12px; align-items: center }
+.logo {  
+  width: 44px; height: 44px; border-radius: 10px;  
+  background: linear-gradient(135deg, var(--accent), #06b6d4);  
+  display: flex; align-items: center; justify-content: center;  
+  color: white; font-weight: 700;
+}
+h1 { font-size: 18px; margin: 0 }
+p.lead { margin: 0; color: var(--muted); font-size: 13px }
+
+/* top controls */
+.controls { display: flex; gap: 8px; align-items: center }
+button, .btn {
+  background: var(--accent); color: white; border: none;  
+  padding: 10px 12px; border-radius: 10px; cursor: pointer;  
+  box-shadow: var(--shadow); transition: background 0.2s, box-shadow 0.2s;
+}
+button:hover, .btn:hover { opacity: 0.9; }
+.btn.secondary {  
+  background: transparent; color: var(--accent);  
+  border: 1px solid var(--border); box-shadow: none;  
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.btn.secondary:hover { background: rgba(37, 99, 235, 0.05); }
+html.dark-mode .btn.secondary:hover { background: rgba(255, 255, 255, 0.08); } /* MENGGUNAKAN html.dark-mode */
+
+.icon-btn {  
+  background: transparent; border: none; padding: 8px;  
+  border-radius: 8px; cursor: pointer; color: var(--text);
+}
+.icon-btn:hover { background: var(--hover-bg); }
+
+/* main area */
+.grid { display: grid; grid-template-columns: 260px 1fr; gap: 18px; margin-top: 18px }
+.card {  
+  background: var(--card); border-radius: var(--radius);  
+  padding: 14px; box-shadow: var(--shadow); transition: background 0.3s, box-shadow 0.3s;
+}
+
+/* sidebar */
+.categories { display: flex; flex-direction: column; gap: 8px }
+.cat {  
+  padding: 8px 10px; border-radius: 10px; cursor: pointer;  
+  color: var(--muted); display: flex; justify-content: space-between;  
+  transition: background 0.2s, color 0.2s;
+}
+.cat:hover { background: var(--hover-bg); color: var(--text); }
+.cat.active {  
+  background: rgba(37, 99, 235, 0.08); color: var(--accent); font-weight: 600;
+}
+html.dark-mode .cat.active { background: rgba(96, 165, 250, 0.2); } /* MENGGUNAKAN html.dark-mode */
+
+/* thread list */
+.thread { display: flex; gap: 12px; padding: 10px; border-radius: 10px; align-items: flex-start }
+.thread:hover { background: var(--hover-bg); }
+.meta { font-size: 12px; color: var(--muted) }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border) }
+
+/* composer */
+textarea, input[type="text"], select {
+  width: 100%; padding: 10px; border-radius: 10px;  
+  border: 1px solid var(--border); resize: vertical;
+  background: var(--card); color: var(--text);
+  transition: border-color 0.3s, background 0.3s;
+}
+input[type="text"] { padding: 8px; border-radius: 8px; }
+
+/* thread view */
+.thread-title { font-size: 18px; margin: 0 }
+.thread-actions { display: flex; gap: 8px; align-items: center }
+.reply {  
+  margin-top: 12px; padding: 10px; border-radius: 10px;  
+  border: 1px solid var(--reply-border); background: var(--reply-bg);
+}
+.reply .meta { font-size: 12px }
+.btn.small { padding: 6px 8px; font-size: 12px; border-radius: 6px; }
+
+/* vote */
+.vote { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 8px }
+.vote button { background: transparent; border: none; cursor: pointer; color: var(--muted); }
+.vote button:hover { color: var(--accent); }
+.votes-count { font-weight: 700; color: var(--text); }
+
+/* profile */
+.profile { display: flex; gap: 10px; align-items: center }
+.avatar {  
+  width: 36px; height: 36px; border-radius: 10px;  
+  background: var(--border); display: flex; align-items: center;  
+  justify-content: center; color: var(--muted); font-weight: 700;
+}
+
+/* notifications */
+.notif-badge {  
+  background: #ef4444; color: white; border-radius: 10px;  
+  padding: 4px 6px; font-size: 12px;
+}
+
+/* modal specific */
+.modal-backdrop {  
+  position: fixed; inset: 0;  
+  background: rgba(2, 6, 23, 0.45);  
+  display: flex; align-items: center; justify-content: center;  
+  padding: 16px; z-index: 999;
+}
+html.dark-mode .modal-backdrop { background: rgba(0, 0, 0, 0.8); } /* MENGGUNAKAN html.dark-mode */
+
+/* Media Styling */
+.thread-media img, .thread-media video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 10px;
+    display: block;
+    max-height: 400px;
+    background: var(--border);  
+    border: 1px solid var(--border);
+}
+/* Memastikan video kontrol gelap (hanya bekerja di beberapa browser) */
+html.dark-mode .thread-media video { /* MENGGUNAKAN html.dark-mode */
+    color: var(--text);  
+    background-color: var(--bg);
+}
+
+
+/* small screens */
+@media (max-width: 800px) {
+  .grid { grid-template-columns: 1fr; }
+  .brand h1 { font-size: 16px }
+  .logo { width: 40px; height: 40px }
+}
