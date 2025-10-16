@@ -8,9 +8,6 @@
   <link rel="stylesheet" href="style.css">
 
   <script>
-    // SCRIPT INI PENTING UNTUK TETAP DI SINI!
-    // Tujuannya adalah menerapkan tema gelap secepat mungkin
-    // sebelum halaman selesai dimuat untuk menghindari kedipan (flash).
     (function() {
       const savedTheme = localStorage.getItem('obrolin_theme');
       if (savedTheme === 'dark') {
@@ -35,7 +32,7 @@
         </button>
         <div class="profile" id="top-profile">
           </div>
-        <button class="icon-btn" id="notif-btn" title="Notifikasi">
+        <button class="icon-btn" id="notif-btn" title="Notifikasi" disabled>
           🔔 <span id="notif-count" style="margin-left: 6px"></span>
         </button>
         <button class="btn" id="new-thread-btn">Buat Thread</button>
@@ -49,7 +46,7 @@
         <hr style="margin: 12px 0; border-color: var(--border);">
         <div>
           <strong>Info</strong>
-          <p style="color: var(--muted); font-size: 13px">Demo: penyimpanan lokal (localStorage). Cocok untuk prototipe dan belajar.</p>
+          <p style="color: var(--muted); font-size: 13px">Koneksi: Supabase.io. Data disimpan online di database PostgreSQL.</p>
         </div>
       </aside>
 
@@ -76,14 +73,15 @@
         </div>
 
         <div style="height: 14px"></div>
-
-        <div id="threads-list"></div>
+        <div id="threads-list"><div class="card" style="text-align:center;">Memuat data...</div></div>
       </main>
     </div>
 
     <div id="modal-root"></div>
   </div>
 
-  <script src="script.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
